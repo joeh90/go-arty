@@ -11,9 +11,5 @@
   "artifactoryRequestsCanRetrieveRemoteArtifacts": false,
   "keyPair": "keypair1",
   "pomRepositoryReferencesCleanupPolicy": "discard_active_reference",
-  "defaultDeploymentRepo": "local-repo1",
-  "forceMavenAuthentication" : false,
-  "externalDependenciesEnabled": false,
-  "externalDependenciesPatterns": ["**/*microsoft*/**", "**/*github*/**"],
-  "externalDependenciesRemoteRepo": ""
+  "defaultDeploymentRepo": "local-repo1"
 }
