@@ -883,11 +883,12 @@ func (s *SystemService) UpdateConfiguration(config GlobalConfigRequest) (*string
 	// Set Content-Type header for YAML
 	req.Header.Add("Content-Type", "application/yaml")
 
-	v := new(string)
+	v := new(bytes.Buffer)
 	resp, err := s.client.Do(req, v)
+	vStr := v.String()
 	if err != nil {
-		return v, resp, err
+		return &vStr, resp, err
 	}
 
-	return v, resp, err
+	return &vStr, resp, err
 }
