@@ -98,7 +98,7 @@ type GlobalConfigRequest struct {
 		BuildGlobalBasicReadAllowed      *BuildGlobalBasicReadAllowed      `yaml:"buildGlobalBasicReadAllowed,omitempty"`
 		BuildGlobalBasicReadForAnonymous *BuildGlobalBasicReadForAnonymous `yaml:"buildGlobalBasicReadForAnonymous,omitempty"`
 	} `yaml:"security,omitempty"`
-	Backups             *map[string]Backup             `yaml:"backups,omitempty"`
+	Backups             *map[string]*Backup             `yaml:"backups,omitempty"`
 	Proxies             *map[string]Proxy              `yaml:"proxies,omitempty"`
 	ReverseProxies      *map[string]ReverseProxy       `yaml:"reverseProxies,omitempty"`
 	PropertySets        *map[string]PropertySetRequest `yaml:"propertySets,omitempty"`

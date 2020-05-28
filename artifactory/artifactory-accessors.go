@@ -1343,14 +1343,6 @@ func (g *GlobalConfigCommon) GetXrayConfig() *XrayConfig {
 	return g.XrayConfig
 }
 
-// GetBackups returns the Backups field if it's non-nil, zero value otherwise.
-func (g *GlobalConfigRequest) GetBackups() map[string]Backup {
-	if g == nil || g.Backups == nil {
-		return map[string]Backup{}
-	}
-	return *g.Backups
-}
-
 // GetBintrayApplications returns the BintrayApplications field if it's non-nil, zero value otherwise.
 func (g *GlobalConfigRequest) GetBintrayApplications() map[string]BintrayApplication {
 	if g == nil || g.BintrayApplications == nil {
