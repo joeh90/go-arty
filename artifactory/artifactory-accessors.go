@@ -3607,20 +3607,20 @@ func (s *SecurityRequest) GetAnonAccessEnabled() bool {
 	return *s.AnonAccessEnabled
 }
 
-// GetBuildGlobalBasicReadAllowed returns the BuildGlobalBasicReadAllowed field.
-func (s *SecurityRequest) GetBuildGlobalBasicReadAllowed() *BuildGlobalBasicReadAllowed {
-	if s == nil {
-		return nil
+// GetBuildGlobalBasicReadAllowed returns the BuildGlobalBasicReadAllowed field if it's non-nil, zero value otherwise.
+func (s *SecurityRequest) GetBuildGlobalBasicReadAllowed() bool {
+	if s == nil || s.BuildGlobalBasicReadAllowed == nil {
+		return false
 	}
-	return s.BuildGlobalBasicReadAllowed
+	return *s.BuildGlobalBasicReadAllowed
 }
 
-// GetBuildGlobalBasicReadForAnonymous returns the BuildGlobalBasicReadForAnonymous field.
-func (s *SecurityRequest) GetBuildGlobalBasicReadForAnonymous() *BuildGlobalBasicReadForAnonymous {
-	if s == nil {
-		return nil
+// GetBuildGlobalBasicReadForAnonymous returns the BuildGlobalBasicReadForAnonymous field if it's non-nil, zero value otherwise.
+func (s *SecurityRequest) GetBuildGlobalBasicReadForAnonymous() bool {
+	if s == nil || s.BuildGlobalBasicReadForAnonymous == nil {
+		return false
 	}
-	return s.BuildGlobalBasicReadForAnonymous
+	return *s.BuildGlobalBasicReadForAnonymous
 }
 
 // GetCrowdSettings returns the CrowdSettings field.

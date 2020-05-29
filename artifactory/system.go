@@ -253,18 +253,18 @@ type PropertySetResponse struct {
 //
 // Docs: https://www.jfrog.com/confluence/display/RTF/YAML+Configuration+File#YAMLConfigurationFile-Security(Generalsecurity,PasswordPolicy,LDAP,SAML,OAuth,HTTPSSO,Crowd)
 type SecurityRequest struct {
-	AnonAccessEnabled                *bool                             `yaml:"anonAccessEnabled,omitempty"`
-	UserLockPolicy                   *UserLockPolicy                   `yaml:"userLockPolicy,omitempty"`
-	PasswordSettings                 *PasswordSettings                 `yaml:"passwordSettings,omitempty"`
-	LdapSettings                     *map[string]*LdapSetting          `yaml:"ldapSettings,omitempty"`
-	LdapGroupSettings                *map[string]*LdapGroupSetting     `yaml:"ldapGroupSettings,omitempty"`
-	HttpSsoSettings                  *HttpSsoSettings                  `yaml:"httpSsoSettings,omitempty"`
-	CrowdSettings                    *CrowdSettings                    `yaml:"crowdSettings,omitempty"`
-	SamlSettings                     *SamlSettings                     `yaml:"samlSettings,omitempty"`
-	OauthSettings                    *OauthSettingsRequest             `yaml:"oauthSettings,omitempty"`
-	AccessClientSettings             *AccessClientSettings             `yaml:"accessClientSettings,omitempty"`
-	BuildGlobalBasicReadAllowed      *BuildGlobalBasicReadAllowed      `yaml:"buildGlobalBasicReadAllowed,omitempty"`
-	BuildGlobalBasicReadForAnonymous *BuildGlobalBasicReadForAnonymous `yaml:"buildGlobalBasicReadForAnonymous,omitempty"`
+	AnonAccessEnabled                *bool                         `yaml:"anonAccessEnabled,omitempty"`
+	UserLockPolicy                   *UserLockPolicy               `yaml:"userLockPolicy,omitempty"`
+	PasswordSettings                 *PasswordSettings             `yaml:"passwordSettings,omitempty"`
+	LdapSettings                     *map[string]*LdapSetting      `yaml:"ldapSettings,omitempty"`
+	LdapGroupSettings                *map[string]*LdapGroupSetting `yaml:"ldapGroupSettings,omitempty"`
+	HttpSsoSettings                  *HttpSsoSettings              `yaml:"httpSsoSettings,omitempty"`
+	CrowdSettings                    *CrowdSettings                `yaml:"crowdSettings,omitempty"`
+	SamlSettings                     *SamlSettings                 `yaml:"samlSettings,omitempty"`
+	OauthSettings                    *OauthSettingsRequest         `yaml:"oauthSettings,omitempty"`
+	AccessClientSettings             *AccessClientSettings         `yaml:"accessClientSettings,omitempty"`
+	BuildGlobalBasicReadAllowed      *bool                         `yaml:"buildGlobalBasicReadAllowed,omitempty"`
+	BuildGlobalBasicReadForAnonymous *bool                         `yaml:"buildGlobalBasicReadForAnonymous,omitempty"`
 }
 
 // SecurityResponse represents Security settings in a response to a GET request for Artifactory Security Configuration.
