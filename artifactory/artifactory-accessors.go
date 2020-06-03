@@ -1423,6 +1423,14 @@ func (g *GlobalConfig) GetRevision() int {
 	return *g.Revision
 }
 
+// GetSecurity returns the Security field.
+func (g *GlobalConfig) GetSecurity() *Security {
+	if g == nil {
+		return nil
+	}
+	return g.Security
+}
+
 // GetServerName returns the ServerName field if it's non-nil, zero value otherwise.
 func (g *GlobalConfig) GetServerName() string {
 	if g == nil || g.ServerName == nil {
@@ -2288,7 +2296,7 @@ func (o *OauthProviderSetting) GetTokenUrl() string {
 }
 
 // GetAllowUserToAccessProfile returns the AllowUserToAccessProfile field if it's non-nil, zero value otherwise.
-func (o *OauthSettingsRequest) GetAllowUserToAccessProfile() bool {
+func (o *OauthSettings) GetAllowUserToAccessProfile() bool {
 	if o == nil || o.AllowUserToAccessProfile == nil {
 		return false
 	}
@@ -2296,15 +2304,23 @@ func (o *OauthSettingsRequest) GetAllowUserToAccessProfile() bool {
 }
 
 // GetEnableIntegration returns the EnableIntegration field if it's non-nil, zero value otherwise.
-func (o *OauthSettingsRequest) GetEnableIntegration() bool {
+func (o *OauthSettings) GetEnableIntegration() bool {
 	if o == nil || o.EnableIntegration == nil {
 		return false
 	}
 	return *o.EnableIntegration
 }
 
+// GetOauthProvidersSettings returns the OauthProvidersSettings field.
+func (o *OauthSettings) GetOauthProvidersSettings() *OauthProviderSettings {
+	if o == nil {
+		return nil
+	}
+	return o.OauthProvidersSettings
+}
+
 // GetPersistUsers returns the PersistUsers field if it's non-nil, zero value otherwise.
-func (o *OauthSettingsRequest) GetPersistUsers() bool {
+func (o *OauthSettings) GetPersistUsers() bool {
 	if o == nil || o.PersistUsers == nil {
 		return false
 	}
@@ -2312,43 +2328,11 @@ func (o *OauthSettingsRequest) GetPersistUsers() bool {
 }
 
 // GetReset returns the Reset field if it's non-nil, zero value otherwise.
-func (o *OauthSettingsRequest) GetReset() bool {
+func (o *OauthSettings) GetReset() bool {
 	if o == nil || o.Reset == nil {
 		return false
 	}
 	return *o.Reset
-}
-
-// GetAllowUserToAccessProfile returns the AllowUserToAccessProfile field if it's non-nil, zero value otherwise.
-func (o *OauthSettingsResponse) GetAllowUserToAccessProfile() bool {
-	if o == nil || o.AllowUserToAccessProfile == nil {
-		return false
-	}
-	return *o.AllowUserToAccessProfile
-}
-
-// GetEnableIntegration returns the EnableIntegration field if it's non-nil, zero value otherwise.
-func (o *OauthSettingsResponse) GetEnableIntegration() bool {
-	if o == nil || o.EnableIntegration == nil {
-		return false
-	}
-	return *o.EnableIntegration
-}
-
-// GetOauthProvidersSettings returns the OauthProvidersSettings field if it's non-nil, zero value otherwise.
-func (o *OauthSettingsResponse) GetOauthProvidersSettings() []OauthProviderSetting {
-	if o == nil || o.OauthProvidersSettings == nil {
-		return nil
-	}
-	return *o.OauthProvidersSettings
-}
-
-// GetPersistUsers returns the PersistUsers field if it's non-nil, zero value otherwise.
-func (o *OauthSettingsResponse) GetPersistUsers() bool {
-	if o == nil || o.PersistUsers == nil {
-		return false
-	}
-	return *o.PersistUsers
 }
 
 // GetEncryptionPolicy returns the EncryptionPolicy field if it's non-nil, zero value otherwise.
@@ -3600,7 +3584,7 @@ func (s *SamlSettings) GetSyncGroups() bool {
 }
 
 // GetAccessClientSettings returns the AccessClientSettings field.
-func (s *SecurityRequest) GetAccessClientSettings() *AccessClientSettings {
+func (s *Security) GetAccessClientSettings() *AccessClientSettings {
 	if s == nil {
 		return nil
 	}
@@ -3608,7 +3592,7 @@ func (s *SecurityRequest) GetAccessClientSettings() *AccessClientSettings {
 }
 
 // GetAnonAccessEnabled returns the AnonAccessEnabled field if it's non-nil, zero value otherwise.
-func (s *SecurityRequest) GetAnonAccessEnabled() bool {
+func (s *Security) GetAnonAccessEnabled() bool {
 	if s == nil || s.AnonAccessEnabled == nil {
 		return false
 	}
@@ -3616,7 +3600,7 @@ func (s *SecurityRequest) GetAnonAccessEnabled() bool {
 }
 
 // GetBuildGlobalBasicReadAllowed returns the BuildGlobalBasicReadAllowed field if it's non-nil, zero value otherwise.
-func (s *SecurityRequest) GetBuildGlobalBasicReadAllowed() bool {
+func (s *Security) GetBuildGlobalBasicReadAllowed() bool {
 	if s == nil || s.BuildGlobalBasicReadAllowed == nil {
 		return false
 	}
@@ -3624,7 +3608,7 @@ func (s *SecurityRequest) GetBuildGlobalBasicReadAllowed() bool {
 }
 
 // GetBuildGlobalBasicReadForAnonymous returns the BuildGlobalBasicReadForAnonymous field if it's non-nil, zero value otherwise.
-func (s *SecurityRequest) GetBuildGlobalBasicReadForAnonymous() bool {
+func (s *Security) GetBuildGlobalBasicReadForAnonymous() bool {
 	if s == nil || s.BuildGlobalBasicReadForAnonymous == nil {
 		return false
 	}
@@ -3632,7 +3616,7 @@ func (s *SecurityRequest) GetBuildGlobalBasicReadForAnonymous() bool {
 }
 
 // GetCrowdSettings returns the CrowdSettings field.
-func (s *SecurityRequest) GetCrowdSettings() *CrowdSettings {
+func (s *Security) GetCrowdSettings() *CrowdSettings {
 	if s == nil {
 		return nil
 	}
@@ -3640,7 +3624,7 @@ func (s *SecurityRequest) GetCrowdSettings() *CrowdSettings {
 }
 
 // GetHideUnauthorizedResources returns the HideUnauthorizedResources field if it's non-nil, zero value otherwise.
-func (s *SecurityRequest) GetHideUnauthorizedResources() bool {
+func (s *Security) GetHideUnauthorizedResources() bool {
 	if s == nil || s.HideUnauthorizedResources == nil {
 		return false
 	}
@@ -3648,15 +3632,31 @@ func (s *SecurityRequest) GetHideUnauthorizedResources() bool {
 }
 
 // GetHttpSsoSettings returns the HttpSsoSettings field.
-func (s *SecurityRequest) GetHttpSsoSettings() *HttpSsoSettings {
+func (s *Security) GetHttpSsoSettings() *HttpSsoSettings {
 	if s == nil {
 		return nil
 	}
 	return s.HttpSsoSettings
 }
 
+// GetLdapGroupSettings returns the LdapGroupSettings field.
+func (s *Security) GetLdapGroupSettings() *LdapGroupSettings {
+	if s == nil {
+		return nil
+	}
+	return s.LdapGroupSettings
+}
+
+// GetLdapSettings returns the LdapSettings field.
+func (s *Security) GetLdapSettings() *LdapSettings {
+	if s == nil {
+		return nil
+	}
+	return s.LdapSettings
+}
+
 // GetOauthSettings returns the OauthSettings field.
-func (s *SecurityRequest) GetOauthSettings() *OauthSettingsRequest {
+func (s *Security) GetOauthSettings() *OauthSettings {
 	if s == nil {
 		return nil
 	}
@@ -3664,7 +3664,7 @@ func (s *SecurityRequest) GetOauthSettings() *OauthSettingsRequest {
 }
 
 // GetPasswordSettings returns the PasswordSettings field.
-func (s *SecurityRequest) GetPasswordSettings() *PasswordSettings {
+func (s *Security) GetPasswordSettings() *PasswordSettings {
 	if s == nil {
 		return nil
 	}
@@ -3672,7 +3672,7 @@ func (s *SecurityRequest) GetPasswordSettings() *PasswordSettings {
 }
 
 // GetSamlSettings returns the SamlSettings field.
-func (s *SecurityRequest) GetSamlSettings() *SamlSettings {
+func (s *Security) GetSamlSettings() *SamlSettings {
 	if s == nil {
 		return nil
 	}
@@ -3680,111 +3680,7 @@ func (s *SecurityRequest) GetSamlSettings() *SamlSettings {
 }
 
 // GetUserLockPolicy returns the UserLockPolicy field.
-func (s *SecurityRequest) GetUserLockPolicy() *UserLockPolicy {
-	if s == nil {
-		return nil
-	}
-	return s.UserLockPolicy
-}
-
-// GetAccessClientSettings returns the AccessClientSettings field.
-func (s *SecurityResponse) GetAccessClientSettings() *AccessClientSettings {
-	if s == nil {
-		return nil
-	}
-	return s.AccessClientSettings
-}
-
-// GetAnonAccessEnabled returns the AnonAccessEnabled field if it's non-nil, zero value otherwise.
-func (s *SecurityResponse) GetAnonAccessEnabled() bool {
-	if s == nil || s.AnonAccessEnabled == nil {
-		return false
-	}
-	return *s.AnonAccessEnabled
-}
-
-// GetBuildGlobalBasicReadAllowed returns the BuildGlobalBasicReadAllowed field if it's non-nil, zero value otherwise.
-func (s *SecurityResponse) GetBuildGlobalBasicReadAllowed() bool {
-	if s == nil || s.BuildGlobalBasicReadAllowed == nil {
-		return false
-	}
-	return *s.BuildGlobalBasicReadAllowed
-}
-
-// GetBuildGlobalBasicReadForAnonymous returns the BuildGlobalBasicReadForAnonymous field if it's non-nil, zero value otherwise.
-func (s *SecurityResponse) GetBuildGlobalBasicReadForAnonymous() bool {
-	if s == nil || s.BuildGlobalBasicReadForAnonymous == nil {
-		return false
-	}
-	return *s.BuildGlobalBasicReadForAnonymous
-}
-
-// GetCrowdSettings returns the CrowdSettings field.
-func (s *SecurityResponse) GetCrowdSettings() *CrowdSettings {
-	if s == nil {
-		return nil
-	}
-	return s.CrowdSettings
-}
-
-// GetHideUnauthorizedResources returns the HideUnauthorizedResources field if it's non-nil, zero value otherwise.
-func (s *SecurityResponse) GetHideUnauthorizedResources() bool {
-	if s == nil || s.HideUnauthorizedResources == nil {
-		return false
-	}
-	return *s.HideUnauthorizedResources
-}
-
-// GetHttpSsoSettings returns the HttpSsoSettings field.
-func (s *SecurityResponse) GetHttpSsoSettings() *HttpSsoSettings {
-	if s == nil {
-		return nil
-	}
-	return s.HttpSsoSettings
-}
-
-// GetLdapGroupSettings returns the LdapGroupSettings field if it's non-nil, zero value otherwise.
-func (s *SecurityResponse) GetLdapGroupSettings() []LdapGroupSetting {
-	if s == nil || s.LdapGroupSettings == nil {
-		return nil
-	}
-	return *s.LdapGroupSettings
-}
-
-// GetLdapSettings returns the LdapSettings field if it's non-nil, zero value otherwise.
-func (s *SecurityResponse) GetLdapSettings() []LdapSetting {
-	if s == nil || s.LdapSettings == nil {
-		return nil
-	}
-	return *s.LdapSettings
-}
-
-// GetOauthSettings returns the OauthSettings field.
-func (s *SecurityResponse) GetOauthSettings() *OauthSettingsResponse {
-	if s == nil {
-		return nil
-	}
-	return s.OauthSettings
-}
-
-// GetPasswordSettings returns the PasswordSettings field.
-func (s *SecurityResponse) GetPasswordSettings() *PasswordSettings {
-	if s == nil {
-		return nil
-	}
-	return s.PasswordSettings
-}
-
-// GetSamlSettings returns the SamlSettings field.
-func (s *SecurityResponse) GetSamlSettings() *SamlSettings {
-	if s == nil {
-		return nil
-	}
-	return s.SamlSettings
-}
-
-// GetUserLockPolicy returns the UserLockPolicy field.
-func (s *SecurityResponse) GetUserLockPolicy() *UserLockPolicy {
+func (s *Security) GetUserLockPolicy() *UserLockPolicy {
 	if s == nil {
 		return nil
 	}

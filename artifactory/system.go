@@ -72,6 +72,7 @@ type GlobalConfig struct {
 	ReleaseBundlesConfig      *ReleaseBundlesConfig      `yaml:"releaseBundlesConfig,omitempty" xml:"releaseBundlesConfig,omitempty"`
 	SignedUrlConfig           *SignedUrlConfig           `yaml:"signedUrlConfig,omitempty" xml:"signedUrlConfig,omitempty"`
 	DownloadRedirectConfig    *DownloadRedirectConfig    `yaml:"downloadRedirectConfig,omitempty" xml:"downloadRedirectConfig,omitempty"`
+	Security                  *Security                  `yaml:"security,omitempty" xml:"security,omitempty"`
 	Backups                   *Backups                   `yaml:"backups,omitempty" xml:"backups>backup,omitempty"`
 	Proxies                   *Proxies                   `yaml:"proxies,omitempty" xml:"proxies>proxy,omitempty"`
 	ReverseProxies            *ReverseProxies            `yaml:"reverseProxies,omitempty" xml:"reverseProxies>reverseProxy,omitempty"`
@@ -356,42 +357,20 @@ func (p *PropertySets) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	return nil
 }
 
-// SecurityRequest represents Security settings in a PATCH request to update Artifactory Security Configuration.
-//
-// Docs: https://www.jfrog.com/confluence/display/RTF/YAML+Configuration+File#YAMLConfigurationFile-Security(Generalsecurity,PasswordPolicy,LDAP,SAML,OAuth,HTTPSSO,Crowd)
-type SecurityRequest struct {
-	AnonAccessEnabled                *bool                         `yaml:"anonAccessEnabled,omitempty"`
-	HideUnauthorizedResources        *bool                         `yaml:"hideUnauthorizedResources,omitempty"`
-	UserLockPolicy                   *UserLockPolicy               `yaml:"userLockPolicy,omitempty"`
-	PasswordSettings                 *PasswordSettings             `yaml:"passwordSettings,omitempty"`
-	LdapSettings                     *map[string]*LdapSetting      `yaml:"ldapSettings,omitempty"`
-	LdapGroupSettings                *map[string]*LdapGroupSetting `yaml:"ldapGroupSettings,omitempty"`
-	HttpSsoSettings                  *HttpSsoSettings              `yaml:"httpSsoSettings,omitempty"`
-	CrowdSettings                    *CrowdSettings                `yaml:"crowdSettings,omitempty"`
-	SamlSettings                     *SamlSettings                 `yaml:"samlSettings,omitempty"`
-	OauthSettings                    *OauthSettingsRequest         `yaml:"oauthSettings,omitempty"`
-	AccessClientSettings             *AccessClientSettings         `yaml:"accessClientSettings,omitempty"`
-	BuildGlobalBasicReadAllowed      *bool                         `yaml:"buildGlobalBasicReadAllowed,omitempty"`
-	BuildGlobalBasicReadForAnonymous *bool                         `yaml:"buildGlobalBasicReadForAnonymous,omitempty"`
-}
-
-// SecurityResponse represents Security settings in a response to a GET request for Artifactory Security Configuration.
-//
-// Docs: https://www.jfrog.com/confluence/display/RTF/YAML+Configuration+File#YAMLConfigurationFile-Security(Generalsecurity,PasswordPolicy,LDAP,SAML,OAuth,HTTPSSO,Crowd)
-type SecurityResponse struct {
-	AnonAccessEnabled                *bool                  `xml:"anonAccessEnabled,omitempty"`
-	HideUnauthorizedResources        *bool                  `xml:"hideUnauthorizedResources,omitempty"`
-	UserLockPolicy                   *UserLockPolicy        `xml:"userLockPolicy,omitempty"`
-	PasswordSettings                 *PasswordSettings      `xml:"passwordSettings,omitempty"`
-	LdapSettings                     *[]LdapSetting         `xml:"ldapSettings>ldapSetting,omitempty"`
-	LdapGroupSettings                *[]LdapGroupSetting    `xml:"ldapGroupSettings>ldapGroupSetting,omitempty"`
-	HttpSsoSettings                  *HttpSsoSettings       `xml:"httpSsoSettings,omitempty"`
-	CrowdSettings                    *CrowdSettings         `xml:"crowdSettings,omitempty"`
-	SamlSettings                     *SamlSettings          `xml:"samlSettings,omitempty"`
-	OauthSettings                    *OauthSettingsResponse `xml:"oauthSettings,omitempty"`
-	AccessClientSettings             *AccessClientSettings  `xml:"accessClientSettings,omitempty"`
-	BuildGlobalBasicReadAllowed      *bool                  `xml:"buildGlobalBasicReadAllowed,omitempty"`
-	BuildGlobalBasicReadForAnonymous *bool                  `xml:"buildGlobalBasicReadForAnonymous,omitempty"`
+type Security struct {
+	AnonAccessEnabled                *bool                 `yaml:"anonAccessEnabled,omitempty" xml:"anonAccessEnabled,omitempty"`
+	HideUnauthorizedResources        *bool                 `yaml:"hideUnauthorizedResources,omitempty" xml:"hideUnauthorizedResources,omitempty"`
+	UserLockPolicy                   *UserLockPolicy       `yaml:"userLockPolicy,omitempty" xml:"userLockPolicy,omitempty"`
+	PasswordSettings                 *PasswordSettings     `yaml:"passwordSettings,omitempty" xml:"passwordSettings,omitempty"`
+	LdapSettings                     *LdapSettings         `yaml:"ldapSettings,omitempty" xml:"ldapSettings>ldapSetting,omitempty"`
+	LdapGroupSettings                *LdapGroupSettings    `yaml:"ldapGroupSettings,omitempty" xml:"ldapGroupSettings>ldapGroupSetting,omitempty"`
+	HttpSsoSettings                  *HttpSsoSettings      `yaml:"httpSsoSettings,omitempty" xml:"httpSsoSettings,omitempty"`
+	CrowdSettings                    *CrowdSettings        `yaml:"crowdSettings,omitempty" xml:"crowdSettings,omitempty"`
+	SamlSettings                     *SamlSettings         `yaml:"samlSettings,omitempty" xml:"samlSettings,omitempty"`
+	OauthSettings                    *OauthSettings        `yaml:"oauthSettings,omitempty" xml:"oauthSettings,omitempty"`
+	AccessClientSettings             *AccessClientSettings `yaml:"accessClientSettings,omitempty" xml:"accessClientSettings,omitempty"`
+	BuildGlobalBasicReadAllowed      *bool                 `yaml:"buildGlobalBasicReadAllowed,omitempty" xml:"buildGlobalBasicReadAllowed,omitempty"`
+	BuildGlobalBasicReadForAnonymous *bool                 `yaml:"buildGlobalBasicReadForAnonymous,omitempty" xml:"buildGlobalBasicReadForAnonymous,omitempty"`
 }
 
 // PasswordSettings represents the Password settings in Artifactory Security Configuration.
@@ -502,6 +481,37 @@ type LdapSetting struct {
 	Enabled                  *bool   `yaml:"enabled,omitempty" xml:"enabled,omitempty"`
 }
 
+// LdapSettings is an alias for a slice of LdapSetting that can be
+// properly marshaled to/from YAML.
+type LdapSettings []LdapSetting
+
+// MarshalYAML implements the yaml.Marshaller interface for LdapSettings.
+func (l LdapSettings) MarshalYAML() (interface{}, error) {
+	ldapSettingsMap := make(map[string]LdapSetting)
+	for _, ldapSetting := range l {
+		ldapSettingsMap[*ldapSetting.Key] = ldapSetting
+	}
+
+	return ldapSettingsMap, nil
+}
+
+// UnmarshalYAML implements yaml.Unmarshaler for LdapSettings.
+func (l *LdapSettings) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	ldapSettingsMap := make(map[string]*LdapSetting)
+	if err := unmarshal(ldapSettingsMap); err != nil {
+		return err
+	}
+
+	var ldapSettingsSlice LdapSettings
+	for ldapSettingKey, ldapSetting := range ldapSettingsMap {
+		ldapSetting.Key = &ldapSettingKey
+		ldapSettingsSlice = append(ldapSettingsSlice, *ldapSetting)
+	}
+
+	*l = ldapSettingsSlice
+	return nil
+}
+
 // LdapGroupSetting represents the LDAP Group settings in Artifactory Security Configuration.
 //
 // Docs: https://www.jfrog.com/confluence/display/RTF/YAML+Configuration+File#YAMLConfigurationFile-Security(Generalsecurity,PasswordPolicy,LDAP,SAML,OAuth,HTTPSSO,Crowd)
@@ -515,6 +525,37 @@ type LdapGroupSetting struct {
 	GroupNameAttribute   *string `yaml:"groupNameAttribute,omitempty" xml:"groupNameAttribute,omitempty"`
 	Strategy             *string `yaml:"strategy,omitempty" xml:"strategy,omitempty"`
 	SubTree              *bool   `yaml:"subTree,omitempty" xml:"subTree,omitempty"`
+}
+
+// LdapGroupSettings is an alias for a slice of LdapGroupSetting that can be
+// properly marshaled to/from YAML.
+type LdapGroupSettings []LdapGroupSetting
+
+// MarshalYAML implements the yaml.Marshaller interface for LdapGroupSettings.
+func (l LdapGroupSettings) MarshalYAML() (interface{}, error) {
+	ldapGroupSettingsMap := make(map[string]LdapGroupSetting)
+	for _, ldapGroupSetting := range l {
+		ldapGroupSettingsMap[*ldapGroupSetting.Name] = ldapGroupSetting
+	}
+
+	return ldapGroupSettingsMap, nil
+}
+
+// UnmarshalYAML implements yaml.Unmarshaler for LdapGroupSettings.
+func (l *LdapGroupSettings) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	ldapGroupSettingsMap := make(map[string]*LdapGroupSetting)
+	if err := unmarshal(ldapGroupSettingsMap); err != nil {
+		return err
+	}
+
+	var ldapGroupSettingsSlice LdapGroupSettings
+	for ldapGroupSettingName, ldapGroupSetting := range ldapGroupSettingsMap {
+		ldapGroupSetting.Name = &ldapGroupSettingName
+		ldapGroupSettingsSlice = append(ldapGroupSettingsSlice, *ldapGroupSetting)
+	}
+
+	*l = ldapGroupSettingsSlice
+	return nil
 }
 
 // AccessClientSettings represents the Access Client settings in Artifactory
@@ -576,33 +617,54 @@ func (s SamlSettings) MarshalYAML() (interface{}, error) {
 	return s, nil
 }
 
-// OauthSettingsRequest represents the OAuth settings in a PATCH request to update Artifactory Security Configuration.
+// OauthSettings represents the OAuth settings in Artifactory Security Configuration.
 //
 // Docs: https://www.jfrog.com/confluence/display/RTF/YAML+Configuration+File#YAMLConfigurationFile-Security(Generalsecurity,PasswordPolicy,LDAP,SAML,OAuth,HTTPSSO,Crowd)
-type OauthSettingsRequest struct {
-	AllowUserToAccessProfile *bool                             `yaml:"allowUserToAccessProfile,omitempty"`
-	EnableIntegration        *bool                             `yaml:"enableIntegration,omitempty"`
-	PersistUsers             *bool                             `yaml:"persistUsers,omitempty"`
-	OauthProvidersSettings   *map[string]*OauthProviderSetting `yaml:"oauthProvidersSettings,omitempty"`
-	Reset                    *bool                             `yaml:"-"`
+type OauthSettings struct {
+	AllowUserToAccessProfile *bool                  `yaml:"allowUserToAccessProfile,omitempty" xml:"allowUserToAccessProfile,omitempty"`
+	EnableIntegration        *bool                  `yaml:"enableIntegration,omitempty" xml:"enableIntegration,omitempty"`
+	PersistUsers             *bool                  `yaml:"persistUsers,omitempty" xml:"persistUsers,omitempty"`
+	OauthProvidersSettings   *OauthProviderSettings `yaml:"oauthProvidersSettings,omitempty" xml:"oauthProvidersSettings>oauthProvidersSettings,omitempty"`
+	Reset                    *bool                  `yaml:"-" xml:"-"`
 }
 
 // MarshalYAML implements the Marshaller interface.
-func (o OauthSettingsRequest) MarshalYAML() (interface{}, error) {
+func (o OauthSettings) MarshalYAML() (interface{}, error) {
 	if o.Reset != nil && *o.Reset {
 		return nil, nil
 	}
 	return o, nil
 }
 
-// OauthSettingsResponse represents the OAuth settings in a response to a GET request for Artifactory Security Configuration.
-//
-// Docs: https://www.jfrog.com/confluence/display/RTF/YAML+Configuration+File#YAMLConfigurationFile-Security(Generalsecurity,PasswordPolicy,LDAP,SAML,OAuth,HTTPSSO,Crowd)
-type OauthSettingsResponse struct {
-	AllowUserToAccessProfile *bool                   `xml:"allowUserToAccessProfile,omitempty"`
-	EnableIntegration        *bool                   `xml:"enableIntegration,omitempty"`
-	PersistUsers             *bool                   `xml:"persistUsers,omitempty"`
-	OauthProvidersSettings   *[]OauthProviderSetting `xml:"oauthProvidersSettings>oauthProvidersSettings,omitempty"`
+// OauthProviderSettings is an alias for a slice of OauthProviderSetting that can be
+// properly marshaled to/from YAML.
+type OauthProviderSettings []OauthProviderSetting
+
+// MarshalYAML implements the yaml.Marshaller interface for OauthProviderSettings.
+func (o OauthProviderSettings) MarshalYAML() (interface{}, error) {
+	oauthProviderSettingsMap := make(map[string]OauthProviderSetting)
+	for _, oauthProviderSetting := range o {
+		oauthProviderSettingsMap[*oauthProviderSetting.Name] = oauthProviderSetting
+	}
+
+	return oauthProviderSettingsMap, nil
+}
+
+// UnmarshalYAML implements yaml.Unmarshaler for OauthProviderSettings.
+func (o *OauthProviderSettings) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	oauthProviderSettingsMap := make(map[string]*OauthProviderSetting)
+	if err := unmarshal(oauthProviderSettingsMap); err != nil {
+		return err
+	}
+
+	var oauthProviderSettingsSlice OauthProviderSettings
+	for oauthProviderSettingName, oauthProviderSetting := range oauthProviderSettingsMap {
+		oauthProviderSetting.Name = &oauthProviderSettingName
+		oauthProviderSettingsSlice = append(oauthProviderSettingsSlice, *oauthProviderSetting)
+	}
+
+	*o = oauthProviderSettingsSlice
+	return nil
 }
 
 // OauthProviderSetting represents the Oauth Provider settings in Artifactory Security Configuration.
