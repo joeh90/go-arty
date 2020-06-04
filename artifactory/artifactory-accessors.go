@@ -1919,12 +1919,60 @@ func (l *LdapSetting) GetLdapUrl() string {
 	return *l.LdapUrl
 }
 
+// GetSearch returns the Search field.
+func (l *LdapSetting) GetSearch() *LdapSettingSearch {
+	if l == nil {
+		return nil
+	}
+	return l.Search
+}
+
 // GetUserDnPattern returns the UserDnPattern field if it's non-nil, zero value otherwise.
 func (l *LdapSetting) GetUserDnPattern() string {
 	if l == nil || l.UserDnPattern == nil {
 		return ""
 	}
 	return *l.UserDnPattern
+}
+
+// GetManagerDn returns the ManagerDn field if it's non-nil, zero value otherwise.
+func (l *LdapSettingSearch) GetManagerDn() string {
+	if l == nil || l.ManagerDn == nil {
+		return ""
+	}
+	return *l.ManagerDn
+}
+
+// GetManagerPassword returns the ManagerPassword field if it's non-nil, zero value otherwise.
+func (l *LdapSettingSearch) GetManagerPassword() string {
+	if l == nil || l.ManagerPassword == nil {
+		return ""
+	}
+	return *l.ManagerPassword
+}
+
+// GetSearchBase returns the SearchBase field if it's non-nil, zero value otherwise.
+func (l *LdapSettingSearch) GetSearchBase() string {
+	if l == nil || l.SearchBase == nil {
+		return ""
+	}
+	return *l.SearchBase
+}
+
+// GetSearchFilter returns the SearchFilter field if it's non-nil, zero value otherwise.
+func (l *LdapSettingSearch) GetSearchFilter() string {
+	if l == nil || l.SearchFilter == nil {
+		return ""
+	}
+	return *l.SearchFilter
+}
+
+// GetSearchSubTree returns the SearchSubTree field if it's non-nil, zero value otherwise.
+func (l *LdapSettingSearch) GetSearchSubTree() bool {
+	if l == nil || l.SearchSubTree == nil {
+		return false
+	}
+	return *l.SearchSubTree
 }
 
 // GetLicensedTo returns the LicensedTo field if it's non-nil, zero value otherwise.

@@ -161,13 +161,18 @@ type Proxy struct {
 
 // Proxies is an alias for a slice of Proxy that can be
 // properly marshaled to/from YAML.
-type Proxies []Proxy
+type Proxies []*Proxy
 
 // MarshalYAML implements the yaml.Marshaller interface for Proxies.
 func (p Proxies) MarshalYAML() (interface{}, error) {
-	proxiesMap := make(map[string]Proxy)
+	proxiesMap := make(map[string]*Proxy)
 	for _, proxy := range p {
-		proxiesMap[*proxy.Key] = proxy
+		if *proxy == (Proxy{Key: proxy.Key}) {
+			proxiesMap[*proxy.Key] = nil
+		} else {
+			proxiesMap[*proxy.Key] = proxy
+		}
+
 	}
 
 	return proxiesMap, nil
@@ -182,8 +187,11 @@ func (p *Proxies) UnmarshalYAML(unmarshal func(interface{}) error) error {
 
 	var proxiesSlice Proxies
 	for proxyKey, proxy := range proxiesMap {
+		if proxy == nil {
+			continue
+		}
 		proxy.Key = &proxyKey
-		proxiesSlice = append(proxiesSlice, *proxy)
+		proxiesSlice = append(proxiesSlice, proxy)
 	}
 
 	*p = proxiesSlice
@@ -214,13 +222,17 @@ type ReverseProxy struct {
 
 // ReverseProxies is an alias for a slice of ReverseProxy that can be
 // properly marshaled to/from YAML.
-type ReverseProxies []ReverseProxy
+type ReverseProxies []*ReverseProxy
 
 // MarshalYAML implements the yaml.Marshaller interface for ReverseProxies.
 func (r ReverseProxies) MarshalYAML() (interface{}, error) {
-	reverseProxiesMap := make(map[string]ReverseProxy)
+	reverseProxiesMap := make(map[string]*ReverseProxy)
 	for _, reverseProxy := range r {
-		reverseProxiesMap[*reverseProxy.Key] = reverseProxy
+		if *reverseProxy == (ReverseProxy{Key: reverseProxy.Key}) {
+			reverseProxiesMap[*reverseProxy.Key] = nil
+		} else {
+			reverseProxiesMap[*reverseProxy.Key] = reverseProxy
+		}
 	}
 
 	return reverseProxiesMap, nil
@@ -235,8 +247,11 @@ func (r *ReverseProxies) UnmarshalYAML(unmarshal func(interface{}) error) error 
 
 	var reverseProxiesSlice ReverseProxies
 	for reverseProxyKey, reverseProxy := range reverseProxiesMap {
+		if reverseProxy == nil {
+			continue
+		}
 		reverseProxy.Key = &reverseProxyKey
-		reverseProxiesSlice = append(reverseProxiesSlice, *reverseProxy)
+		reverseProxiesSlice = append(reverseProxiesSlice, reverseProxy)
 	}
 
 	*r = reverseProxiesSlice
@@ -254,13 +269,17 @@ type PropertySet struct {
 
 // Properties is an alias for a slice of Property in a PropertySet that can be
 // properly marshaled to/from YAML.
-type Properties []Property
+type Properties []*Property
 
 // MarshalYAML implements the yaml.Marshaller interface for Properties.
 func (p Properties) MarshalYAML() (interface{}, error) {
-	propertiesMap := make(map[string]Property)
+	propertiesMap := make(map[string]*Property)
 	for _, property := range p {
-		propertiesMap[*property.Name] = property
+		if *property == (Property{Name: property.Name}) {
+			propertiesMap[*property.Name] = nil
+		} else {
+			propertiesMap[*property.Name] = property
+		}
 	}
 
 	return propertiesMap, nil
@@ -275,8 +294,11 @@ func (p *Properties) UnmarshalYAML(unmarshal func(interface{}) error) error {
 
 	var propertiesSlice Properties
 	for propertyName, property := range propertiesMap {
+		if property == nil {
+			continue
+		}
 		property.Name = &propertyName
-		propertiesSlice = append(propertiesSlice, *property)
+		propertiesSlice = append(propertiesSlice, property)
 	}
 
 	*p = propertiesSlice
@@ -297,13 +319,17 @@ type PredefinedValue struct {
 
 // PredefinedValues is an alias for a slice of PredefinedValue in a
 // PropertySet's Property that can be properly marshaled to/from YAML.
-type PredefinedValues []PredefinedValue
+type PredefinedValues []*PredefinedValue
 
 // MarshalYAML implements the yaml.Marshaller interface for PredefinedValues.
 func (p PredefinedValues) MarshalYAML() (interface{}, error) {
-	predefinedValuesMap := make(map[string]PredefinedValue)
+	predefinedValuesMap := make(map[string]*PredefinedValue)
 	for _, predefinedValue := range p {
-		predefinedValuesMap[*predefinedValue.Value] = predefinedValue
+		if *predefinedValue == (PredefinedValue{Value: predefinedValue.Value}) {
+			predefinedValuesMap[*predefinedValue.Value] = nil
+		} else {
+			predefinedValuesMap[*predefinedValue.Value] = predefinedValue
+		}
 	}
 
 	return predefinedValuesMap, nil
@@ -318,8 +344,11 @@ func (p *PredefinedValues) UnmarshalYAML(unmarshal func(interface{}) error) erro
 
 	var predefinedValuesSlice PredefinedValues
 	for predefinedValueName, predefinedValue := range predefinedValuesMap {
+		if predefinedValue == nil {
+			continue
+		}
 		predefinedValue.Value = &predefinedValueName
-		predefinedValuesSlice = append(predefinedValuesSlice, *predefinedValue)
+		predefinedValuesSlice = append(predefinedValuesSlice, predefinedValue)
 	}
 
 	*p = predefinedValuesSlice
@@ -328,13 +357,17 @@ func (p *PredefinedValues) UnmarshalYAML(unmarshal func(interface{}) error) erro
 
 // PropertySets is an alias for a slice of PropertySet that can be
 // properly marshaled to/from YAML.
-type PropertySets []PropertySet
+type PropertySets []*PropertySet
 
 // MarshalYAML implements the yaml.Marshaller interface for PropertySets.
 func (p PropertySets) MarshalYAML() (interface{}, error) {
-	propertySetsMap := make(map[string]PropertySet)
+	propertySetsMap := make(map[string]*PropertySet)
 	for _, propertySet := range p {
-		propertySetsMap[*propertySet.Name] = propertySet
+		if *propertySet == (PropertySet{Name: propertySet.Name}) {
+			propertySetsMap[*propertySet.Name] = nil
+		} else {
+			propertySetsMap[*propertySet.Name] = propertySet
+		}
 	}
 
 	return propertySetsMap, nil
@@ -349,8 +382,11 @@ func (p *PropertySets) UnmarshalYAML(unmarshal func(interface{}) error) error {
 
 	var propertySetsSlice PropertySets
 	for propertySetName, propertySet := range propertySetsMap {
+		if propertySet == nil {
+			continue
+		}
 		propertySet.Name = &propertySetName
-		propertySetsSlice = append(propertySetsSlice, *propertySet)
+		propertySetsSlice = append(propertySetsSlice, propertySet)
 	}
 
 	*p = propertySetsSlice
@@ -464,32 +500,40 @@ func (s SigningKeysSettings) MarshalYAML() (interface{}, error) {
 //
 // Docs: https://www.jfrog.com/confluence/display/RTF/YAML+Configuration+File#YAMLConfigurationFile-Security(Generalsecurity,PasswordPolicy,LDAP,SAML,OAuth,HTTPSSO,Crowd)
 type LdapSetting struct {
-	Key                     *string `yaml:"-" xml:"key,omitempty"`
-	EmailAttribute          *string `yaml:"emailAttribute,omitempty" xml:"emailAttribute,omitempty"`
-	LdapPoisoningProtection *bool   `yaml:"ldapPoisoningProtection,omitempty" xml:"ldapPoisoningProtection,omitempty"`
-	LdapUrl                 *string `yaml:"ldapUrl,omitempty" xml:"ldapUrl,omitempty"`
-	Search                  *struct {
-		ManagerDn       *string `yaml:"managerDn,omitempty" xml:"managerDn,omitempty"`
-		ManagerPassword *string `yaml:"managerPassword,omitempty" xml:"managerPassword,omitempty"`
-		SearchBase      *string `yaml:"searchBase,omitempty" xml:"searchBase,omitempty"`
-		SearchFilter    *string `yaml:"searchFilter,omitempty" xml:"searchFilter,omitempty"`
-		SearchSubTree   *bool   `yaml:"searchSubTree,omitempty" xml:"searchSubTree,omitempty"`
-	} `yaml:"search,omitempty" xml:"search,omitempty"`
-	UserDnPattern            *string `yaml:"userDnPattern,omitempty" xml:"userDnPattern,omitempty"`
-	AllowUserToAccessProfile *bool   `yaml:"allowUserToAccessProfile,omitempty" xml:"allowUserToAccessProfile,omitempty"`
-	AutoCreateUser           *bool   `yaml:"autoCreateUser,omitempty" xml:"autoCreateUser,omitempty"`
-	Enabled                  *bool   `yaml:"enabled,omitempty" xml:"enabled,omitempty"`
+	Key                      *string            `yaml:"-" xml:"key,omitempty"`
+	EmailAttribute           *string            `yaml:"emailAttribute,omitempty" xml:"emailAttribute,omitempty"`
+	LdapPoisoningProtection  *bool              `yaml:"ldapPoisoningProtection,omitempty" xml:"ldapPoisoningProtection,omitempty"`
+	LdapUrl                  *string            `yaml:"ldapUrl,omitempty" xml:"ldapUrl,omitempty"`
+	Search                   *LdapSettingSearch `yaml:"search,omitempty" xml:"search,omitempty"`
+	UserDnPattern            *string            `yaml:"userDnPattern,omitempty" xml:"userDnPattern,omitempty"`
+	AllowUserToAccessProfile *bool              `yaml:"allowUserToAccessProfile,omitempty" xml:"allowUserToAccessProfile,omitempty"`
+	AutoCreateUser           *bool              `yaml:"autoCreateUser,omitempty" xml:"autoCreateUser,omitempty"`
+	Enabled                  *bool              `yaml:"enabled,omitempty" xml:"enabled,omitempty"`
+}
+
+// LdapSettingSearch represents the Search setting in an LDAPSetting.
+//
+type LdapSettingSearch struct {
+	ManagerDn       *string `yaml:"managerDn,omitempty" xml:"managerDn,omitempty"`
+	ManagerPassword *string `yaml:"managerPassword,omitempty" xml:"managerPassword,omitempty"`
+	SearchBase      *string `yaml:"searchBase,omitempty" xml:"searchBase,omitempty"`
+	SearchFilter    *string `yaml:"searchFilter,omitempty" xml:"searchFilter,omitempty"`
+	SearchSubTree   *bool   `yaml:"searchSubTree,omitempty" xml:"searchSubTree,omitempty"`
 }
 
 // LdapSettings is an alias for a slice of LdapSetting that can be
 // properly marshaled to/from YAML.
-type LdapSettings []LdapSetting
+type LdapSettings []*LdapSetting
 
 // MarshalYAML implements the yaml.Marshaller interface for LdapSettings.
 func (l LdapSettings) MarshalYAML() (interface{}, error) {
-	ldapSettingsMap := make(map[string]LdapSetting)
+	ldapSettingsMap := make(map[string]*LdapSetting)
 	for _, ldapSetting := range l {
-		ldapSettingsMap[*ldapSetting.Key] = ldapSetting
+		if *ldapSetting == (LdapSetting{Key: ldapSetting.Key}) {
+			ldapSettingsMap[*ldapSetting.Key] = nil
+		} else {
+			ldapSettingsMap[*ldapSetting.Key] = ldapSetting
+		}
 	}
 
 	return ldapSettingsMap, nil
@@ -504,8 +548,11 @@ func (l *LdapSettings) UnmarshalYAML(unmarshal func(interface{}) error) error {
 
 	var ldapSettingsSlice LdapSettings
 	for ldapSettingKey, ldapSetting := range ldapSettingsMap {
+		if ldapSetting == nil {
+			continue
+		}
 		ldapSetting.Key = &ldapSettingKey
-		ldapSettingsSlice = append(ldapSettingsSlice, *ldapSetting)
+		ldapSettingsSlice = append(ldapSettingsSlice, ldapSetting)
 	}
 
 	*l = ldapSettingsSlice
@@ -529,13 +576,17 @@ type LdapGroupSetting struct {
 
 // LdapGroupSettings is an alias for a slice of LdapGroupSetting that can be
 // properly marshaled to/from YAML.
-type LdapGroupSettings []LdapGroupSetting
+type LdapGroupSettings []*LdapGroupSetting
 
 // MarshalYAML implements the yaml.Marshaller interface for LdapGroupSettings.
 func (l LdapGroupSettings) MarshalYAML() (interface{}, error) {
-	ldapGroupSettingsMap := make(map[string]LdapGroupSetting)
+	ldapGroupSettingsMap := make(map[string]*LdapGroupSetting)
 	for _, ldapGroupSetting := range l {
-		ldapGroupSettingsMap[*ldapGroupSetting.Name] = ldapGroupSetting
+		if *ldapGroupSetting == (LdapGroupSetting{Name: ldapGroupSetting.Name}) {
+			ldapGroupSettingsMap[*ldapGroupSetting.Name] = nil
+		} else {
+			ldapGroupSettingsMap[*ldapGroupSetting.Name] = ldapGroupSetting
+		}
 	}
 
 	return ldapGroupSettingsMap, nil
@@ -550,8 +601,11 @@ func (l *LdapGroupSettings) UnmarshalYAML(unmarshal func(interface{}) error) err
 
 	var ldapGroupSettingsSlice LdapGroupSettings
 	for ldapGroupSettingName, ldapGroupSetting := range ldapGroupSettingsMap {
+		if ldapGroupSetting == nil {
+			continue
+		}
 		ldapGroupSetting.Name = &ldapGroupSettingName
-		ldapGroupSettingsSlice = append(ldapGroupSettingsSlice, *ldapGroupSetting)
+		ldapGroupSettingsSlice = append(ldapGroupSettingsSlice, ldapGroupSetting)
 	}
 
 	*l = ldapGroupSettingsSlice
@@ -638,13 +692,17 @@ func (o OauthSettings) MarshalYAML() (interface{}, error) {
 
 // OauthProviderSettings is an alias for a slice of OauthProviderSetting that can be
 // properly marshaled to/from YAML.
-type OauthProviderSettings []OauthProviderSetting
+type OauthProviderSettings []*OauthProviderSetting
 
 // MarshalYAML implements the yaml.Marshaller interface for OauthProviderSettings.
 func (o OauthProviderSettings) MarshalYAML() (interface{}, error) {
-	oauthProviderSettingsMap := make(map[string]OauthProviderSetting)
+	oauthProviderSettingsMap := make(map[string]*OauthProviderSetting)
 	for _, oauthProviderSetting := range o {
-		oauthProviderSettingsMap[*oauthProviderSetting.Name] = oauthProviderSetting
+		if *oauthProviderSetting == (OauthProviderSetting{Name: oauthProviderSetting.Name}) {
+			oauthProviderSettingsMap[*oauthProviderSetting.Name] = nil
+		} else {
+			oauthProviderSettingsMap[*oauthProviderSetting.Name] = oauthProviderSetting
+		}
 	}
 
 	return oauthProviderSettingsMap, nil
@@ -659,8 +717,11 @@ func (o *OauthProviderSettings) UnmarshalYAML(unmarshal func(interface{}) error)
 
 	var oauthProviderSettingsSlice OauthProviderSettings
 	for oauthProviderSettingName, oauthProviderSetting := range oauthProviderSettingsMap {
+		if oauthProviderSetting == nil {
+			continue
+		}
 		oauthProviderSetting.Name = &oauthProviderSettingName
-		oauthProviderSettingsSlice = append(oauthProviderSettingsSlice, *oauthProviderSetting)
+		oauthProviderSettingsSlice = append(oauthProviderSettingsSlice, oauthProviderSetting)
 	}
 
 	*o = oauthProviderSettingsSlice
@@ -720,13 +781,17 @@ type Backup struct {
 
 // Backups is an alias for a slice of Backup that can be
 // properly marshaled to/from YAML.
-type Backups []Backup
+type Backups []*Backup
 
 // MarshalYAML implements the yaml.Marshaller interface for Backups.
 func (b Backups) MarshalYAML() (interface{}, error) {
-	backupsMap := make(map[string]Backup)
+	backupsMap := make(map[string]*Backup)
 	for _, backup := range b {
-		backupsMap[*backup.Key] = backup
+		if *backup == (Backup{Key: backup.Key}) {
+			backupsMap[*backup.Key] = nil
+		} else {
+			backupsMap[*backup.Key] = backup
+		}
 	}
 
 	return backupsMap, nil
@@ -741,12 +806,14 @@ func (b *Backups) UnmarshalYAML(unmarshal func(interface{}) error) error {
 
 	var backupsSlice Backups
 	for backupKey, backupConfig := range backupsMap {
+		if backupConfig == nil {
+			continue
+		}
 		backupConfig.Key = &backupKey
-		backupsSlice = append(backupsSlice, *backupConfig)
+		backupsSlice = append(backupsSlice, backupConfig)
 	}
 
 	*b = backupsSlice
-
 	return nil
 }
 
@@ -783,13 +850,17 @@ type RepoLayout struct {
 
 // RepoLayouts is an alias for a slice of RepoLayout that can be
 // properly marshaled to/from YAML.
-type RepoLayouts []RepoLayout
+type RepoLayouts []*RepoLayout
 
 // MarshalYAML implements the yaml.Marshaller interface for RepoLayouts.
 func (r RepoLayouts) MarshalYAML() (interface{}, error) {
-	repoLayoutsMap := make(map[string]RepoLayout)
+	repoLayoutsMap := make(map[string]*RepoLayout)
 	for _, repoLayout := range r {
-		repoLayoutsMap[*repoLayout.Name] = repoLayout
+		if *repoLayout == (RepoLayout{Name: repoLayout.Name}) {
+			repoLayoutsMap[*repoLayout.Name] = nil
+		} else {
+			repoLayoutsMap[*repoLayout.Name] = repoLayout
+		}
 	}
 
 	return repoLayoutsMap, nil
@@ -804,8 +875,11 @@ func (r *RepoLayouts) UnmarshalYAML(unmarshal func(interface{}) error) error {
 
 	var repoLayoutsSlice RepoLayouts
 	for repoLayoutName, repoLayout := range repoLayoutsMap {
+		if repoLayout == nil {
+			continue
+		}
 		repoLayout.Name = &repoLayoutName
-		repoLayoutsSlice = append(repoLayoutsSlice, *repoLayout)
+		repoLayoutsSlice = append(repoLayoutsSlice, repoLayout)
 	}
 
 	*r = repoLayoutsSlice
@@ -969,13 +1043,17 @@ type BintrayApplication struct {
 
 // BintrayApplications is an alias for a slice of BintrayApplication that can be
 // properly marshaled to/from YAML.
-type BintrayApplications []BintrayApplication
+type BintrayApplications []*BintrayApplication
 
 // MarshalYAML implements the yaml.Marshaller interface for RepoLayouts.
 func (b BintrayApplications) MarshalYAML() (interface{}, error) {
-	bintrayApplicationsMap := make(map[string]BintrayApplication)
+	bintrayApplicationsMap := make(map[string]*BintrayApplication)
 	for _, bintrayApplication := range b {
-		bintrayApplicationsMap[*bintrayApplication.Key] = bintrayApplication
+		if *bintrayApplication == (BintrayApplication{Key: bintrayApplication.Key}) {
+			bintrayApplicationsMap[*bintrayApplication.Key] = nil
+		} else {
+			bintrayApplicationsMap[*bintrayApplication.Key] = bintrayApplication
+		}
 	}
 
 	return bintrayApplicationsMap, nil
@@ -990,8 +1068,11 @@ func (b *BintrayApplications) UnmarshalYAML(unmarshal func(interface{}) error) e
 
 	var bintrayApplicationsSlice BintrayApplications
 	for bintrayApplicationKey, bintrayApplication := range bintrayApplicationsMap {
+		if bintrayApplication == nil {
+			continue
+		}
 		bintrayApplication.Key = &bintrayApplicationKey
-		bintrayApplicationsSlice = append(bintrayApplicationsSlice, *bintrayApplication)
+		bintrayApplicationsSlice = append(bintrayApplicationsSlice, bintrayApplication)
 	}
 
 	*b = bintrayApplicationsSlice
